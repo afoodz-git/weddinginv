@@ -731,6 +731,14 @@
                 </div>
 
                 <div class="form-group">
+                    <label>Domain Undangan</label>
+                    <select id="domain_select" onchange="generateGuestLink()" style="background: rgba(6,10,18,0.85); color: #38bdf8; font-weight: 600;">
+                        <option value="https://fahmiokta.my.id/">https://fahmiokta.my.id/ (Domain Utama)</option>
+                        <option value="auto">Deteksi Otomatis Browser</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
                     <label>Nama Tamu / Keluarga Yang Diundang</label>
                     <input type="text" id="guest_input" placeholder="Contoh: Bapak Ahmad &amp; Keluarga" oninput="generateGuestLink()">
                     <span class="input-hint">Ketikkan nama tamu untuk menghasilkan tautan undangan personal secara otomatis.</span>
@@ -1518,15 +1526,28 @@
         if (thumbEl && mainPhoto) thumbEl.src = mainPhoto;
     }
 
+    function getActiveBaseDomain() {
+        const sel = document.getElementById('domain_select');
+        if (sel && sel.value !== 'auto') {
+            return sel.value;
+        }
+        if (window.location.protocol === 'file:') {
+            return 'https://fahmiokta.my.id/';
+        }
+        return window.location.origin + window.location.pathname.replace('admin.html', 'index.html');
+    }
+
     function generateGuestLink() {
         const guestName = (document.getElementById('guest_input')?.value || '').trim();
         const output = document.getElementById('guest_link_output');
         if (!output) return;
+        const base = getActiveBaseDomain();
         if (!guestName) {
-            output.value = BASE_DOMAIN;
+            output.value = base;
             return;
         }
-        output.value = `${BASE_DOMAIN}?to=${encodeURIComponent(guestName)}`;
+        const separator = base.includes('?') ? '&' : '?';
+        output.value = `${base}${separator}to=${encodeURIComponent(guestName)}`;
     }
 
     function copyGuestLink() {
