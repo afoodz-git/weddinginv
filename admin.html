@@ -220,15 +220,19 @@
 
         /* Apple Segmented Pill Navigation */
         .segmented-dock {
+            position: sticky;
+            top: 14px;
+            z-index: 50;
             display: flex;
             gap: 6px;
-            background: rgba(18, 24, 35, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(14, 20, 32, 0.82);
+            backdrop-filter: blur(28px) saturate(180%);
+            -webkit-backdrop-filter: blur(28px) saturate(180%);
             padding: 6px;
             border-radius: var(--radius-lg);
             margin-bottom: 22px;
-            border: 1px solid var(--glass-border);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
             overflow-x: auto;
             scrollbar-width: none;
         }
@@ -625,8 +629,34 @@
             animation: spin 0.8s linear infinite;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        /* Apple Glass Modal & Toast Styling */
+        div:where(.swal2-container).swal2-backdrop-show {
+            backdrop-filter: blur(14px) !important;
+            -webkit-backdrop-filter: blur(14px) !important;
+            background: rgba(4, 7, 12, 0.65) !important;
+        }
+
+        .apple-swal {
+            background: rgba(18, 25, 38, 0.92) !important;
+            backdrop-filter: blur(28px) saturate(190%) !important;
+            -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            border-radius: var(--radius-xl) !important;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6) !important;
+            color: #ffffff !important;
+        }
+
+        .apple-swal .swal2-title {
+            font-size: 1.1rem !important;
+            font-weight: 700 !important;
+            letter-spacing: -0.01em;
+            color: #ffffff !important;
+        }
+
+        .apple-swal .swal2-html-container {
+            font-size: 0.85rem !important;
+            color: var(--text-secondary) !important;
+            line-height: 1.5 !important;
         }
     </style>
 </head>
@@ -1827,7 +1857,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         const savedKey = localStorage.getItem('IMGBB_API_KEY') || 'bd55f725fc71f21f49b55f8e7f293fd6';
-        if (savedKey) document.getElementById('imgbb_key').value = savedKey;
+        if (savedKey && document.getElementById('imgbb_key')) document.getElementById('imgbb_key').value = savedKey;
 
         // Local cache first for instant render
         const local = JSON.parse(localStorage.getItem('CUSTOM_WEDDING_DATA') || 'null') || WEDDING_DATA;
@@ -1835,6 +1865,16 @@
 
         // Fetch live state from Cloudflare D1
         loadCloudConfig();
+
+        // Reactive live listener for Dynamic Island & Monogram
+        const liveWatchedInputs = ['groom_nick', 'bride_nick', 'akad_date', 'monogram', 'val_mainCouple'];
+        liveWatchedInputs.forEach(id => {
+            const inputEl = document.getElementById(id);
+            if (inputEl) {
+                inputEl.addEventListener('input', syncLiveOverview);
+                inputEl.addEventListener('change', syncLiveOverview);
+            }
+        });
     });
 
     document.getElementById('adminForm').addEventListener('submit', async (e) => {
@@ -1989,267 +2029,6 @@
     function escapeHtml(str) {
         if (!str) return '';
         return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-    }
-
-    function generateConfigJsContent() {
-        const d = getFormDataObject();
-        return `let WEDDING_DATA = ${JSON.stringify(d, null, 4)};
-
-function deepMergeConfig(target, source) {
-    if (!source || typeof source !== 'object') return target;
-    for (const key of Object.keys(source)) {
-        if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
-            if (!target[key] || typeof target[key] !== 'object') target[key] = {};
-            deepMergeConfig(target[key], source[key]);
-        } else {
-            target[key] = source[key];
-        }
-    }
-    return target;
-}
-
-const localData = typeof localStorage !== 'undefined' ? localStorage.getItem('CUSTOM_WEDDING_DATA') : null;
-if (localData) {
-    try {
-        const parsed = JSON.parse(localData);
-        deepMergeConfig(WEDDING_DATA, parsed);
-    } catch(e) {}
-}
-
-async function fetchLiveConfig() {
-    const configEndpoint = (WEDDING_DATA.api && WEDDING_DATA.api.configUrl) || "https://wedding-api.fahmifakih89.workers.dev/api/config";
-    try {
-        const res = await fetch(configEndpoint);
-        if (res.ok) {
-            const result = await res.json();
-            if (result.success && result.data && typeof result.data === 'object') {
-                deepMergeConfig(WEDDING_DATA, result.data);
-                applyWeddingData();
-            }
-        }
-    } catch(err) {
-        console.warn('Gagal memuat konfigurasi cloud:', err);
-    }
-}
-
-function applyWeddingData() {
-    const d = WEDDING_DATA;
-    const coupleNames = \`\${d.couple.groom.nickname} & \${d.couple.bride.nickname}\`;
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const guestParam = urlParams.get('to') || urlParams.get('u') || urlParams.get('guest') || urlParams.get('nama');
-    let guestName = 'Tamu Undangan';
-    if (guestParam && guestParam.trim().length > 0) {
-        try {
-            guestName = decodeURIComponent(guestParam.replace(/\\+/g, ' ')).trim();
-        } catch(e) {
-            guestName = guestParam.trim();
-        }
-    }
-
-    const rsvpNameInput = document.querySelector('[data-rsvp="name"]');
-    if (rsvpNameInput && (!rsvpNameInput.value || rsvpNameInput.value === 'Nama Tamu' || rsvpNameInput.value === 'Tamu Undangan') && guestParam) {
-        rsvpNameInput.value = guestName;
-    }
-
-    document.title = \`\${d.couple.title} \${coupleNames}\`;
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) metaDesc.content = \`Undangan Pernikahan \${coupleNames} - \${d.couple.weddingDateShort}\`;
-    const ogTitle = document.querySelector('meta[property="og:title"]');
-    if (ogTitle) ogTitle.content = \`\${d.couple.title} \${coupleNames}\`;
-    const ogDesc = document.querySelector('meta[property="og:description"]');
-    if (ogDesc) ogDesc.content = \`Undangan Pernikahan \${coupleNames} - \${d.couple.weddingDateShort}\`;
-    const ogSite = document.querySelector('meta[property="og:site_name"]');
-    if (ogSite) ogSite.content = \`\${d.couple.title} \${coupleNames}\`;
-    const ogImg = document.querySelector('meta[property="og:image"]');
-    if (ogImg && d.photos && d.photos.mainCouple) ogImg.content = d.photos.mainCouple;
-
-    const quoteHtml = \`"\${d.quotes?.text || ''}"<br><br>\${d.quotes?.source || ''}\`;
-
-    const bindings = {
-        'guestName': guestName,
-        'couple.title': d.couple.title,
-        'couple.names': coupleNames,
-        'couple.namesBreak': \`\${d.couple.groom.nickname} <br>&amp; \${d.couple.bride.nickname}\`,
-        'couple.monogram': d.couple.monogram,
-        'couple.weddingDateShort': d.couple.weddingDateShort,
-        
-        'couple.groom.nickname': d.couple.groom.nickname,
-        'couple.groom.fullname': d.couple.groom.fullname,
-        'couple.groom.parents': d.couple.groom.parents,
-        'couple.groom.instagram': d.couple.groom.instagram,
-        'couple.groom.photo': d.couple.groom.photo,
-        
-        'couple.bride.nickname': d.couple.bride.nickname,
-        'couple.bride.fullname': d.couple.bride.fullname,
-        'couple.bride.parents': d.couple.bride.parents,
-        'couple.bride.instagram': d.couple.bride.instagram,
-        'couple.bride.photo': d.couple.bride.photo,
-
-        'quotes.fullHtml': quoteHtml,
-        'quotes.text': d.quotes?.text || '',
-        'quotes.source': d.quotes?.source || '',
-
-        'greetings.salam': d.greetings?.salam || '',
-        'greetings.intro': d.greetings?.intro || '',
-
-        'countdown.title': d.countdown?.title || '',
-        'countdown.quote': d.countdown?.quote || '',
-
-        'story.title': d.story?.title || '',
-        'story.story1Title': d.story?.story1Title || '',
-        'story.story1Desc': d.story?.story1Desc || '',
-        'story.story2Title': d.story?.story2Title || '',
-        'story.story2Desc': d.story?.story2Desc || '',
-        'story.story3Title': d.story?.story3Title || '',
-        'story.story3Desc': d.story?.story3Desc || '',
-        
-        'photos.coverBg': d.photos.coverBg,
-        'photos.mainCouple': d.photos.mainCouple,
-        'photos.storyPhoto': d.photos.storyPhoto,
-        
-        'events.countdownTarget': d.events.countdownTarget,
-        'events.akad.title': d.events.akad.title,
-        'events.akad.dayDate': d.events.akad.dayDate,
-        'events.akad.time': d.events.akad.time,
-        'events.akad.placeTitle': d.events.akad.placeTitle,
-        'events.akad.address': d.events.akad.address,
-        'events.akad.placeHtml': \`Tempat : <span class="niku-multiline"><strong>\${d.events.akad.placeTitle || 'KEDIAMAN MEMPELAI'}</strong><br class="niku-lb">\${(d.events.akad.address || '').replace(/\\n/g, '<br class="niku-lb">')}</span>\`,
-        'events.akad.mapsUrl': d.events.akad.mapsUrl,
-        
-        'events.resepsi.title': d.events.resepsi.title,
-        'events.resepsi.dayDate': d.events.resepsi.dayDate,
-        'events.resepsi.time': d.events.resepsi.time,
-        'events.resepsi.placeTitle': d.events.resepsi.placeTitle,
-        'events.resepsi.address': d.events.resepsi.address,
-        'events.resepsi.placeHtml': \`Tempat : <span class="niku-multiline"><strong>\${d.events.resepsi.placeTitle || 'KEDIAMAN MEMPELAI'}<br class="niku-lb"></strong>\${(d.events.resepsi.address || '').replace(/\\n/g, '<br class="niku-lb">')}</span>\`,
-        'events.resepsi.mapsUrl': d.events.resepsi.mapsUrl,
-        
-        'gifts.title': d.gifts?.title || 'Amplop Digital',
-        'gifts.description': d.gifts?.description || '',
-        'gifts.bankGroom.accountNumber': (d.gifts.bankGroom || d.gifts.bank).accountNumber,
-        'gifts.bankGroom.accountHolderWithNick': \`\${(d.gifts.bankGroom || d.gifts.bank).accountHolder} (\${d.couple.groom.nickname || 'Mempelai Pria'})\`,
-        'gifts.bankBride.accountNumber': d.gifts.bankBride ? d.gifts.bankBride.accountNumber : '',
-        'gifts.bankBride.accountHolderWithNick': d.gifts.bankBride ? \`\${d.gifts.bankBride.accountHolder} (\${d.couple.bride.nickname || 'Mempelai Wanita'})\` : '',
-        
-        'gifts.physicalGift.recipientName': d.gifts.physicalGift ? d.gifts.physicalGift.recipientName : '',
-        'gifts.physicalGift.phone': d.gifts.physicalGift ? d.gifts.physicalGift.phone : '',
-        'gifts.physicalGift.address': d.gifts.physicalGift ? d.gifts.physicalGift.address : '',
-
-        'rsvp.title': d.rsvp?.title || 'Ucapkan Sesuatu',
-        'rsvp.subtitle': d.rsvp?.subtitle || 'Berikan Ucapan & Doa Restu',
-
-        'closing.message': d.closing?.message || '',
-        'closing.salam': d.closing?.salam || '',
-        
-        'audio.src': d.audio.src
-    };
-
-    document.querySelectorAll('[data-bind]').forEach(el => {
-        const key = el.getAttribute('data-bind');
-        if (bindings[key] !== undefined) {
-            el.innerText = bindings[key];
-        }
-    });
-
-    document.querySelectorAll('[data-bind-html]').forEach(el => {
-        const key = el.getAttribute('data-bind-html');
-        if (bindings[key] !== undefined) {
-            el.innerHTML = bindings[key];
-        }
-    });
-
-    document.querySelectorAll('[data-bind-img]').forEach(el => {
-        const key = el.getAttribute('data-bind-img');
-        if (bindings[key]) {
-            el.src = bindings[key];
-            el.srcset = bindings[key];
-        }
-    });
-
-    document.querySelectorAll('[data-bind-bg]').forEach(el => {
-        const key = el.getAttribute('data-bind-bg');
-        if (bindings[key]) {
-            el.style.backgroundImage = \`url("\${bindings[key]}")\`;
-        }
-    });
-
-    document.querySelectorAll('[data-bind-href]').forEach(el => {
-        const key = el.getAttribute('data-bind-href');
-        if (bindings[key]) {
-            el.href = bindings[key];
-        }
-    });
-
-    document.querySelectorAll('[data-bind-copy]').forEach(el => {
-        const key = el.getAttribute('data-bind-copy');
-        if (bindings[key]) {
-            el.setAttribute('data-copy', bindings[key]);
-        }
-    });
-
-    document.querySelectorAll('[data-bind-audio]').forEach(el => {
-        const key = el.getAttribute('data-bind-audio');
-        if (bindings[key]) {
-            el.src = bindings[key];
-            const audioParent = el.closest('audio');
-            if (audioParent && audioParent.load) {
-                audioParent.load();
-            }
-        }
-    });
-
-    document.querySelectorAll('[data-bind-countdown]').forEach(el => {
-        if (d.events && d.events.countdownTarget) {
-            try {
-                const targetDate = new Date(d.events.countdownTarget);
-                if (!isNaN(targetDate.getTime())) {
-                    el.setAttribute('data-target', targetDate.getTime().toString());
-                    el.setAttribute('data-target-iso', targetDate.toISOString());
-                }
-            } catch(e) {}
-        }
-    });
-}
-
-if (typeof document !== 'undefined') {
-    document.addEventListener('DOMContentLoaded', () => {
-        applyWeddingData();
-        fetchLiveConfig();
-        setTimeout(applyWeddingData, 100);
-        setTimeout(applyWeddingData, 400);
-        setTimeout(applyWeddingData, 1200);
-    });
-}
-if (typeof window !== 'undefined') {
-    window.addEventListener('load', applyWeddingData);
-}
-`;
-    }
-
-    function downloadConfigJs() {
-        const content = generateConfigJsContent();
-        const blob = new Blob([content], { type: 'text/javascript' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'config.js';
-        a.click();
-        URL.revokeObjectURL(a.href);
-    }
-
-    function copyConfigJs() {
-        const content = generateConfigJsContent();
-        navigator.clipboard.writeText(content).then(() => {
-            Swal.fire({
-                icon: 'success',
-                title: 'Kode Disalin',
-                text: 'Kode config.js berhasil disalin ke clipboard.',
-                timer: 1500,
-                showConfirmButton: false,
-                background: '#121a28',
-                color: '#fff'
-            });
-        });
     }
 </script>
 </body>
