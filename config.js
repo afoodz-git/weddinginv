@@ -98,10 +98,22 @@ function applyWeddingData() {
 
     document.title = `${d.couple.title} ${coupleNames}`;
 
-    // Dynamic guest name from URL (?to=Nama+Tamu or ?u=Nama+Tamu)
+    // Dynamic guest name from URL (?to=Nama+Tamu or ?u=Nama+Tamu or ?guest=Nama)
     const urlParams = new URLSearchParams(window.location.search);
-    const guestParam = urlParams.get('to') || urlParams.get('u');
-    const guestName = guestParam ? guestParam.trim() : 'Tamu Undangan';
+    const guestParam = urlParams.get('to') || urlParams.get('u') || urlParams.get('guest') || urlParams.get('nama');
+    let guestName = 'Tamu Undangan';
+    if (guestParam && guestParam.trim().length > 0) {
+        try {
+            guestName = decodeURIComponent(guestParam.replace(/\+/g, ' ')).trim();
+        } catch(e) {
+            guestName = guestParam.trim();
+        }
+    }
+
+    // Direct element selector targeting guest name on cover
+    document.querySelectorAll('.tamu-undangan-marker, .elementor-element-33af279f .elementor-heading-title, [data-guest-name]').forEach(el => {
+        el.innerText = guestName;
+    });
 
     // Headings, Monogram, and Guest Name
     document.querySelectorAll('.elementor-heading-title').forEach(el => {
@@ -115,8 +127,10 @@ function applyWeddingData() {
 
     // Populate RSVP name input if empty
     const rsvpNameInput = document.querySelector('[data-rsvp="name"]');
-    if (rsvpNameInput && !rsvpNameInput.value && guestParam) {
-        rsvpNameInput.value = guestName;
+    if (rsvpNameInput && guestParam) {
+        if (!rsvpNameInput.value || rsvpNameInput.value === 'Tamu Undangan' || rsvpNameInput.value === 'Nama Tamu') {
+            rsvpNameInput.value = guestName;
+        }
     }
 
     // Subtitle date
@@ -384,4 +398,9 @@ function initRsvpSystem() {
 document.addEventListener('DOMContentLoaded', () => {
     applyWeddingData();
     initRsvpSystem();
+    setTimeout(applyWeddingData, 100);
+    setTimeout(applyWeddingData, 400);
+    setTimeout(applyWeddingData, 1200);
 });
+window.addEventListener('load', applyWeddingData);
+
