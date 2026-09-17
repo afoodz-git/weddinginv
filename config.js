@@ -80,6 +80,7 @@ let WEDDING_DATA = {
     },
 
     api: {
+        configUrl: "https://wedding-api.fahmifakih89.workers.dev/api/config",
         rsvpUrl: "https://wedding-api.fahmifakih89.workers.dev/api/rsvp"
     }
 };
@@ -90,6 +91,22 @@ if (localData) {
         const parsed = JSON.parse(localData);
         WEDDING_DATA = Object.assign(WEDDING_DATA, parsed);
     } catch(e) {}
+}
+
+async function fetchLiveConfig() {
+    const configEndpoint = (WEDDING_DATA.api && WEDDING_DATA.api.configUrl) || "https://wedding-api.fahmifakih89.workers.dev/api/config";
+    try {
+        const res = await fetch(configEndpoint);
+        if (res.ok) {
+            const result = await res.json();
+            if (result.success && result.data && typeof result.data === 'object') {
+                WEDDING_DATA = Object.assign(WEDDING_DATA, result.data);
+                applyWeddingData();
+            }
+        }
+    } catch(err) {
+        console.warn('Gagal memuat konfigurasi cloud:', err);
+    }
 }
 
 function applyWeddingData() {
@@ -397,6 +414,7 @@ function initRsvpSystem() {
 
 document.addEventListener('DOMContentLoaded', () => {
     applyWeddingData();
+    fetchLiveConfig();
     initRsvpSystem();
     setTimeout(applyWeddingData, 100);
     setTimeout(applyWeddingData, 400);

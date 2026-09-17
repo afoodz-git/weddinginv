@@ -947,12 +947,8 @@
         reader.readAsDataURL(file);
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const savedKey = localStorage.getItem('IMGBB_API_KEY') || 'bd55f725fc71f21f49b55f8e7f293fd6';
-        if (savedKey) document.getElementById('imgbb_key').value = savedKey;
-
-        const saved = JSON.parse(localStorage.getItem('CUSTOM_WEDDING_DATA') || 'null') || WEDDING_DATA;
-        
+    function populateForm(saved) {
+        if (!saved) return;
         if (saved.photos) {
             if (saved.photos.mainCouple) {
                 document.getElementById('prev_mainCouple').src = saved.photos.mainCouple;
@@ -1011,6 +1007,31 @@
 
         generateGuestLink();
         syncOverview();
+    }
+
+    async function loadCloudConfig() {
+        const url = 'https://wedding-api.fahmifakih89.workers.dev/api/config';
+        try {
+            const res = await fetch(url);
+            if (res.ok) {
+                const json = await res.json();
+                if (json.success && json.data) {
+                    populateForm(json.data);
+                    localStorage.setItem('CUSTOM_WEDDING_DATA', JSON.stringify(json.data));
+                }
+            }
+        } catch(err) {
+            console.warn('Gagal load dari cloud D1:', err);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedKey = localStorage.getItem('IMGBB_API_KEY') || 'bd55f725fc71f21f49b55f8e7f293fd6';
+        if (savedKey) document.getElementById('imgbb_key').value = savedKey;
+
+        const saved = JSON.parse(localStorage.getItem('CUSTOM_WEDDING_DATA') || 'null') || WEDDING_DATA;
+        populateForm(saved);
+        loadCloudConfig();
     });
 
     function getFormDataObject() {
@@ -1085,32 +1106,58 @@
             },
             audio: {
                 src: "assets/audio/howls-moving.mp3"
+            },
+            api: {
+                configUrl: "https://wedding-api.fahmifakih89.workers.dev/api/config",
+                rsvpUrl: "https://wedding-api.fahmifakih89.workers.dev/api/rsvp"
             }
         };
     }
 
-    document.getElementById('adminForm').addEventListener('submit', (e) => {
+    document.getElementById('adminForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const customData = getFormDataObject();
         const key = document.getElementById('imgbb_key').value.trim();
         if (key) localStorage.setItem('IMGBB_API_KEY', key);
 
+        // Save locally first
+        localStorage.setItem('CUSTOM_WEDDING_DATA', JSON.stringify(customData));
+
+        Swal.fire({
+            title: 'Menyimpan ke Cloud...',
+            text: 'Mengirimkan data ke Cloudflare D1 Database.',
+            allowOutsideClick: false,
+            didOpen: () => { Swal.showLoading(); },
+            background: '#1e293b',
+            color: '#fff'
+        });
+
         try {
-            localStorage.setItem('CUSTOM_WEDDING_DATA', JSON.stringify(customData));
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil Disimpan',
-                text: 'Data dan foto undangan berhasil diperbarui di browser ini.',
-                timer: 2000,
-                showConfirmButton: false,
-                background: '#1e293b',
-                color: '#fff'
+            const res = await fetch('https://wedding-api.fahmifakih89.workers.dev/api/config', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(customData)
             });
+            const result = await res.json();
+
+            if (res.ok && result.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Tersimpan di Cloudflare D1! 🚀',
+                    text: 'Pengaturan aktif secara global untuk seluruh tamu undangan.',
+                    timer: 2500,
+                    showConfirmButton: false,
+                    background: '#1e293b',
+                    color: '#fff'
+                });
+            } else {
+                throw new Error(result.error || 'Gagal menyimpan ke D1');
+            }
         } catch(err) {
             Swal.fire({
-                icon: 'error',
-                title: 'Gagal Menyimpan',
-                text: 'Ukuran foto terlalu besar. Gunakan ImgBB API Key untuk upload langsung ke cloud.',
+                icon: 'warning',
+                title: 'Tersimpan Lokal Saja',
+                text: 'Data tersimpan di browser ini, namun gagal disinkron ke Cloudflare D1 (' + err.message + '). Pastikan tabel config di D1 sudah dibuat.',
                 background: '#1e293b',
                 color: '#fff'
             });
