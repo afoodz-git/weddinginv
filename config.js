@@ -78,27 +78,27 @@ let WEDDING_DATA = {
         title: "Amplop Digital",
         description: "Doa restu Anda merupakan karunia yang sangat berarti bagi kami, dan jika memberi adalah ungkapan tanda kasih, Anda dapat memberi kado secara cashless.",
         bank: {
-            bankName: "SeaBank",
-            logo: "assets/images/bank-seabank.svg",
-            accountNumber: "901234567890",
-            accountHolder: "Fahmi Fakih"
+            bankName: "BCA",
+            logo: "assets/images/bank-bca.webp",
+            accountNumber: "1234567890",
+            accountHolder: "Nama Pemilik Rekening"
         },
         bankGroom: {
-            bankName: "SeaBank",
-            logo: "assets/images/bank-seabank.svg",
-            accountNumber: "901234567890",
-            accountHolder: "Fahmi Fakih"
+            bankName: "BCA",
+            logo: "assets/images/bank-bca.webp",
+            accountNumber: "1234567890",
+            accountHolder: "Nama Pemilik Rekening (Pria)"
         },
         bankBride: {
-            bankName: "SeaBank",
-            logo: "assets/images/bank-seabank.svg",
-            accountNumber: "909876543210",
-            accountHolder: "Okta"
+            bankName: "BCA",
+            logo: "assets/images/bank-bca.webp",
+            accountNumber: "0987654321",
+            accountHolder: "Nama Pemilik Rekening (Wanita)"
         },
         physicalGift: {
-            recipientName: "Fahmi & Okta",
-            phone: "081234567890",
-            address: "Jl. Contoh Alamat Pengiriman Kado Fisik No. 123"
+            recipientName: "Nama Penerima Kado",
+            phone: "08123456789",
+            address: "Jl. Alamat Pengiriman Kado Fisik No. 123"
         }
     },
 
@@ -257,10 +257,8 @@ function applyWeddingData() {
         
         'gifts.title': d.gifts?.title || 'Amplop Digital',
         'gifts.description': d.gifts?.description || '',
-        'gifts.bankGroom.logo': (d.gifts.bankGroom || d.gifts.bank).logo || 'assets/images/bank-seabank.svg',
         'gifts.bankGroom.accountNumber': (d.gifts.bankGroom || d.gifts.bank).accountNumber,
         'gifts.bankGroom.accountHolderWithNick': `${(d.gifts.bankGroom || d.gifts.bank).accountHolder} (${d.couple.groom.nickname || 'Mempelai Pria'})`,
-        'gifts.bankBride.logo': d.gifts.bankBride?.logo || 'assets/images/bank-seabank.svg',
         'gifts.bankBride.accountNumber': d.gifts.bankBride ? d.gifts.bankBride.accountNumber : '',
         'gifts.bankBride.accountHolderWithNick': d.gifts.bankBride ? `${d.gifts.bankBride.accountHolder} (${d.couple.bride.nickname || 'Mempelai Wanita'})` : '',
         
