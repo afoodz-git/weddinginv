@@ -1334,7 +1334,7 @@
     </form>
 </div>
 
-<script src="config.js?v=4.1"></script>
+<script src="config.js?v=4.2"></script>
 <script>
     const BASE_DOMAIN = window.location.origin + window.location.pathname.replace('admin.html', 'index.html');
     const API_CONFIG_URL = 'https://wedding-api.fahmifakih89.workers.dev/api/config';
@@ -1812,20 +1812,28 @@
                 storyPhoto: document.getElementById('val_story').value.trim() || "assets/images/couple-main.jpg"
             },
             events: {
-                countdownTarget: "2027-01-01T08:00:00+07:00",
+                countdownTarget: (function() {
+                    const akadDate = document.getElementById('akad_date').value.trim() || "Rabu, 7 Oktober 2026";
+                    const akadTime = document.getElementById('akad_time').value.trim() || "Pukul 09.00 WIB";
+                    if (typeof _parseIndoDateTimeToIso === 'function') {
+                        const parsed = _parseIndoDateTimeToIso(akadDate, akadTime);
+                        if (parsed) return parsed;
+                    }
+                    return "2026-10-07T09:00:00+07:00";
+                })(),
                 akad: {
                     title: "Akad Nikah",
-                    dayDate: document.getElementById('akad_date').value.trim() || "Jumat, 1 Januari 2027",
-                    time: document.getElementById('akad_time').value.trim() || "Pukul 08.00 WIB",
-                    placeTitle: document.getElementById('akad_place_title').value.trim() || "GEDUNG / KEDIAMAN MEMPELAI",
+                    dayDate: document.getElementById('akad_date').value.trim() || "Rabu, 7 Oktober 2026",
+                    time: document.getElementById('akad_time').value.trim() || "Pukul 09.00 WIB",
+                    placeTitle: document.getElementById('akad_place_title').value.trim() || "KEDIAMAN MEMPELAI WANITA",
                     address: document.getElementById('akad_place').value.trim() || "Jl. Contoh Alamat Acara Pernikahan No. 123, Kota",
                     mapsUrl: document.getElementById('akad_maps').value.trim() || "https://maps.google.com"
                 },
                 resepsi: {
                     title: "Resepsi",
-                    dayDate: document.getElementById('resepsi_date').value.trim() || "Jumat, 1 Januari 2027",
+                    dayDate: document.getElementById('resepsi_date').value.trim() || "Rabu, 7 Oktober 2026",
                     time: document.getElementById('resepsi_time').value.trim() || "Pukul 11.00 WIB - Selesai",
-                    placeTitle: document.getElementById('resepsi_place_title').value.trim() || "GEDUNG / KEDIAMAN MEMPELAI",
+                    placeTitle: document.getElementById('resepsi_place_title').value.trim() || "KEDIAMAN MEMPELAI WANITA",
                     address: document.getElementById('resepsi_place').value.trim() || "Jl. Contoh Alamat Acara Pernikahan No. 123, Kota",
                     mapsUrl: document.getElementById('resepsi_maps').value.trim() || "https://maps.google.com"
                 }

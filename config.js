@@ -53,22 +53,22 @@ let WEDDING_DATA = {
     },
 
     events: {
-        countdownTarget: "2027-01-01T08:00:00+07:00",
+        countdownTarget: "2026-10-07T09:00:00+07:00",
         
         akad: {
             title: "Akad Nikah",
-            dayDate: "Jumat, 1 Januari 2027",
-            time: "Pukul : 08.00 WIB",
-            placeTitle: "GEDUNG / KEDIAMAN MEMPELAI",
+            dayDate: "Rabu, 7 Oktober 2026",
+            time: "Pukul : 09.00 WIB",
+            placeTitle: "KEDIAMAN MEMPELAI WANITA",
             address: "Jl. Contoh Alamat Acara Pernikahan No. 123, Kota",
             mapsUrl: "https://maps.google.com"
         },
         
         resepsi: {
             title: "Resepsi",
-            dayDate: "Jumat, 1 Januari 2027",
+            dayDate: "Rabu, 7 Oktober 2026",
             time: "Pukul : 11.00 WIB - Selesai",
-            placeTitle: "GEDUNG / KEDIAMAN MEMPELAI",
+            placeTitle: "KEDIAMAN MEMPELAI WANITA",
             address: "Jl. Contoh Alamat Acara Pernikahan No. 123, Kota",
             mapsUrl: "https://maps.google.com"
         }
@@ -342,6 +342,48 @@ function applyWeddingData() {
 
 let _countdownTimerInterval = null;
 
+function _parseIndoDateTimeToIso(dateStr, timeStr) {
+    if (!dateStr) return null;
+    const months = {
+        'januari': 1, 'jan': 1, 'februari': 2, 'feb': 2, 'maret': 3, 'mar': 3,
+        'april': 4, 'apr': 4, 'mei': 5, 'may': 5, 'juni': 6, 'jun': 6,
+        'juli': 7, 'jul': 7, 'agustus': 8, 'agu': 8, 'agt': 8,
+        'september': 9, 'sep': 9, 'oktober': 10, 'okt': 10, 'oct': 10,
+        'november': 11, 'nov': 11, 'desember': 12, 'des': 12, 'dec': 12
+    };
+
+    const cleanDate = dateStr.toLowerCase().trim();
+    let day, month, year;
+
+    const textMatch = cleanDate.match(/(\d{1,2})\s+([a-z]+)\s+(\d{4})/i);
+    if (textMatch && months[textMatch[2]]) {
+        day = parseInt(textMatch[1], 10);
+        month = months[textMatch[2]];
+        year = parseInt(textMatch[3], 10);
+    } else {
+        const numMatch = cleanDate.match(/(\d{1,2})\s*[\.\/\-]\s*(\d{1,2})\s*[\.\/\-]\s*(\d{4})/);
+        if (numMatch) {
+            day = parseInt(numMatch[1], 10);
+            month = parseInt(numMatch[2], 10);
+            year = parseInt(numMatch[3], 10);
+        }
+    }
+
+    if (!day || !month || !year) return null;
+
+    let hour = 8, minute = 0;
+    if (timeStr) {
+        const timeMatch = timeStr.match(/(\d{1,2})[:\.](\d{2})/);
+        if (timeMatch) {
+            hour = parseInt(timeMatch[1], 10);
+            minute = parseInt(timeMatch[2], 10);
+        }
+    }
+
+    const pad = (n) => (n < 10 ? '0' : '') + n;
+    return `${year}-${pad(month)}-${pad(day)}T${pad(hour)}:${pad(minute)}:00+07:00`;
+}
+
 function initLiveCountdown(d) {
     if (_countdownTimerInterval) {
         clearInterval(_countdownTimerInterval);
@@ -352,10 +394,20 @@ function initLiveCountdown(d) {
     if (!countdownElements || !countdownElements.length) return;
 
     function tick() {
-        const rawTarget = (d && d.events && d.events.countdownTarget) || '2027-01-01T08:00:00+07:00';
+        let rawTarget = d && d.events && d.events.countdownTarget;
+        
+        // If countdownTarget is missing or still points to legacy 2027 while akad is different
+        if (!rawTarget || rawTarget === '2027-01-01T08:00:00+07:00') {
+            if (d && d.events && d.events.akad && d.events.akad.dayDate) {
+                const parsed = _parseIndoDateTimeToIso(d.events.akad.dayDate, d.events.akad.time);
+                if (parsed) rawTarget = parsed;
+            }
+        }
+        if (!rawTarget) rawTarget = '2026-10-07T09:00:00+07:00';
+
         let targetDate = new Date(rawTarget);
         if (isNaN(targetDate.getTime())) {
-            targetDate = new Date('2027-01-01T08:00:00+07:00');
+            targetDate = new Date('2026-10-07T09:00:00+07:00');
         }
 
         const now = Date.now();
