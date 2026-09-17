@@ -1,78 +1,115 @@
 let WEDDING_DATA = {
     couple: {
-        monogram: "HA",
+        monogram: "W",
         title: "The Wedding of",
-        weddingDateShort: "28. 12. 2026",
+        weddingDateShort: "01 . 01 . 2027",
         
         groom: {
-            nickname: "Habib",
-            fullname: "Habib Yulianto",
-            parents: "Putra Kedua dari Bapak M. Dawam<br>(Almh) Ibu Dewi Sudarwati",
+            nickname: "Groom",
+            fullname: "Nama Mempelai Pria",
+            parents: "Putra dari Bapak ... & Ibu ...",
             instagram: "https://www.instagram.com/",
-            photo: "assets/images/groom.jpg"
+            photo: "assets/images/couple-main.jpg"
         },
         
         bride: {
-            nickname: "Adiba",
-            fullname: "Adiba Putri Syakila",
-            parents: "Putri Pertama dari Bapak Ahmad<br>Ibu Siti",
+            nickname: "Bride",
+            fullname: "Nama Mempelai Wanita",
+            parents: "Putri dari Bapak ... & Ibu ...",
             instagram: "https://www.instagram.com/",
-            photo: "assets/images/bride.jpg"
+            photo: "assets/images/couple-main.jpg"
         }
+    },
+
+    quotes: {
+        text: "Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir.",
+        source: "(Qs. Ar-Rum : 21)"
+    },
+
+    greetings: {
+        salam: "Assalamu'alaikum Wr. Wb",
+        intro: "Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i serta kerabat sekalian untuk menghadiri acara pernikahan kami."
+    },
+
+    countdown: {
+        title: "Save The Date",
+        quote: "Dan kami bersyukur, dipertemukan Allah di waktu terbaik, Kini kami menanti hari istimewa kami."
+    },
+
+    story: {
+        title: "Love Story",
+        story1Title: "Awal Cerita",
+        story1Desc: "Berawal dari pertemuan sederhana, kami saling mengenal dan mulai berbagi banyak cerita. Tanpa disadari, kebersamaan itu tumbuh menjadi rasa nyaman yang semakin kuat dari hari ke hari.",
+        story2Title: "Lamaran",
+        story2Desc: "Dengan niat yang tulus dan restu keluarga, kami memutuskan untuk melangkah ke tahap yang lebih serius. Momen lamaran menjadi awal dari perjalanan baru yang penuh harapan dan doa baik.",
+        story3Title: "Pernikahan",
+        story3Desc: "Kini kami sampai pada hari yang kami nantikan, hari di mana dua hati dipersatukan dalam ikatan suci pernikahan. Semoga langkah ini menjadi awal kehidupan baru yang penuh cinta, kebahagiaan, dan keberkahan."
     },
 
     photos: {
         coverBg: "assets/images/cover-bg.webp",
-        mainCouple: "assets/images/main-couple.jpg",
-        storyPhoto: "assets/images/story-bg.jpg"
+        mainCouple: "assets/images/couple-main.jpg",
+        storyPhoto: "assets/images/couple-main.jpg"
     },
 
     events: {
-        countdownTarget: "2026-12-28T08:00:00+07:00",
+        countdownTarget: "2027-01-01T08:00:00+07:00",
         
         akad: {
             title: "Akad Nikah",
-            dayDate: "Senin, 28 Desember 2026",
+            dayDate: "Jumat, 1 Januari 2027",
             time: "Pukul : 08.00 WIB",
-            placeTitle: "KEDIAMAN MEMPELAI WANITA",
-            address: "Ds Pagu, Wates, Kediri, Jawa Timur",
-            mapsUrl: "https://maps.app.goo.gl/GgLwpE6Qq8GZYBJh9"
+            placeTitle: "GEDUNG / KEDIAMAN MEMPELAI",
+            address: "Jl. Contoh Alamat Acara Pernikahan No. 123, Kota",
+            mapsUrl: "https://maps.google.com"
         },
         
         resepsi: {
             title: "Resepsi",
-            dayDate: "Senin, 28 Desember 2026",
-            time: "Pukul : 10.00 WIB - Selesai",
-            placeTitle: "KEDIAMAN MEMPELAI WANITA",
-            address: "Ds Pagu, Wates, Kediri, Jawa Timur",
-            mapsUrl: "https://maps.app.goo.gl/GgLwpE6Qq8GZYBJh9"
+            dayDate: "Jumat, 1 Januari 2027",
+            time: "Pukul : 11.00 WIB - Selesai",
+            placeTitle: "GEDUNG / KEDIAMAN MEMPELAI",
+            address: "Jl. Contoh Alamat Acara Pernikahan No. 123, Kota",
+            mapsUrl: "https://maps.google.com"
         }
     },
 
     gifts: {
+        title: "Amplop Digital",
+        description: "Doa restu Anda merupakan karunia yang sangat berarti bagi kami, dan jika memberi adalah ungkapan tanda kasih, Anda dapat memberi kado secara cashless.",
         bank: {
             bankName: "BCA",
             logo: "assets/images/bank-bca.webp",
-            accountNumber: "12345678",
-            accountHolder: "Habib Yulianto (Mempelai Pria)"
+            accountNumber: "1234567890",
+            accountHolder: "Nama Pemilik Rekening"
         },
         bankGroom: {
             bankName: "BCA",
             logo: "assets/images/bank-bca.webp",
-            accountNumber: "12345678",
-            accountHolder: "Habib Yulianto (Mempelai Pria)"
+            accountNumber: "1234567890",
+            accountHolder: "Nama Pemilik Rekening (Pria)"
         },
         bankBride: {
             bankName: "BCA",
             logo: "assets/images/bank-bca.webp",
-            accountNumber: "87654321",
-            accountHolder: "Adiba Putri Syakila (Mempelai Wanita)"
+            accountNumber: "0987654321",
+            accountHolder: "Nama Pemilik Rekening (Wanita)"
         },
         physicalGift: {
-            recipientName: "Habib Yulianto",
-            phone: "081234567890",
-            address: "Ds Pagu Kec.Wates Kab. Kediri"
+            recipientName: "Nama Penerima Kado",
+            phone: "08123456789",
+            address: "Jl. Alamat Pengiriman Kado Fisik No. 123"
         }
+    },
+
+    rsvp: {
+        title: "Ucapkan Sesuatu",
+        subtitle: "Berikan Ucapan & Doa Restu"
+    },
+
+    closing: {
+        message: "Merupakan suatu kehormatan dan kebahagiaan bagi kami, apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu. Atas kehadiran dan doa restunya, kami mengucapkan terima kasih.",
+        salam: "Wassalamu'alaikum Wr. Wb."
     },
 
     audio: {
@@ -85,11 +122,24 @@ let WEDDING_DATA = {
     }
 };
 
-const localData = localStorage.getItem('CUSTOM_WEDDING_DATA');
+function deepMergeConfig(target, source) {
+    if (!source || typeof source !== 'object') return target;
+    for (const key of Object.keys(source)) {
+        if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+            if (!target[key] || typeof target[key] !== 'object') target[key] = {};
+            deepMergeConfig(target[key], source[key]);
+        } else {
+            target[key] = source[key];
+        }
+    }
+    return target;
+}
+
+const localData = typeof localStorage !== 'undefined' ? localStorage.getItem('CUSTOM_WEDDING_DATA') : null;
 if (localData) {
     try {
         const parsed = JSON.parse(localData);
-        WEDDING_DATA = Object.assign(WEDDING_DATA, parsed);
+        deepMergeConfig(WEDDING_DATA, parsed);
     } catch(e) {}
 }
 
@@ -100,7 +150,7 @@ async function fetchLiveConfig() {
         if (res.ok) {
             const result = await res.json();
             if (result.success && result.data && typeof result.data === 'object') {
-                WEDDING_DATA = Object.assign(WEDDING_DATA, result.data);
+                deepMergeConfig(WEDDING_DATA, result.data);
                 applyWeddingData();
             }
         }
@@ -112,8 +162,6 @@ async function fetchLiveConfig() {
 function applyWeddingData() {
     const d = WEDDING_DATA;
     const coupleNames = `${d.couple.groom.nickname} & ${d.couple.bride.nickname}`;
-
-    document.title = `${d.couple.title} ${coupleNames}`;
 
     // Dynamic guest name from URL (?to=Nama+Tamu or ?u=Nama+Tamu or ?guest=Nama)
     const urlParams = new URLSearchParams(window.location.search);
@@ -127,117 +175,179 @@ function applyWeddingData() {
         }
     }
 
-    // Direct element selector targeting guest name on cover
-    document.querySelectorAll('.tamu-undangan-marker, .elementor-element-33af279f .elementor-heading-title, [data-guest-name]').forEach(el => {
-        el.innerText = guestName;
-    });
-
-    // Headings, Monogram, and Guest Name
-    document.querySelectorAll('.elementor-heading-title').forEach(el => {
-        const txt = el.innerText.trim();
-        if (txt === 'HA' || txt === 'A&M' || txt === 'A|M') el.innerText = d.couple.monogram;
-        if (txt.includes('Habib & Adiba') || txt.includes('Habib &amp; Adiba')) el.innerText = coupleNames;
-        if (txt === 'Habib Yulianto') el.innerText = d.couple.groom.fullname;
-        if (txt === 'Adiba Putri Syakila') el.innerText = d.couple.bride.fullname;
-        if (txt === 'Nama Tamu' || txt === 'Tamu Undangan') el.innerText = guestName;
-    });
-
-    // Populate RSVP name input if empty
     const rsvpNameInput = document.querySelector('[data-rsvp="name"]');
-    if (rsvpNameInput && guestParam) {
-        if (!rsvpNameInput.value || rsvpNameInput.value === 'Tamu Undangan' || rsvpNameInput.value === 'Nama Tamu') {
-            rsvpNameInput.value = guestName;
-        }
+    if (rsvpNameInput && (!rsvpNameInput.value || rsvpNameInput.value === 'Nama Tamu' || rsvpNameInput.value === 'Tamu Undangan') && guestParam) {
+        rsvpNameInput.value = guestName;
     }
 
-    // Subtitle date
-    document.querySelectorAll('.elementor-heading-title').forEach(el => {
-        if (el.innerText.includes('28. 12. 2026') || el.innerText.includes('22 . 09 . 2026')) el.innerText = d.couple.weddingDateShort;
+    // Dynamic SEO & Document Title
+    document.title = `${d.couple.title} ${coupleNames}`;
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.content = `Undangan Pernikahan ${coupleNames} - ${d.couple.weddingDateShort}`;
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.content = `${d.couple.title} ${coupleNames}`;
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.content = `Undangan Pernikahan ${coupleNames} - ${d.couple.weddingDateShort}`;
+    const ogSite = document.querySelector('meta[property="og:site_name"]');
+    if (ogSite) ogSite.content = `${d.couple.title} ${coupleNames}`;
+    const ogImg = document.querySelector('meta[property="og:image"]');
+    if (ogImg && d.photos && d.photos.mainCouple) ogImg.content = d.photos.mainCouple;
+
+    const quoteHtml = `"${d.quotes?.text || ''}"<br><br>${d.quotes?.source || ''}`;
+
+    // Resolved Bindings Map
+    const bindings = {
+        'guestName': guestName,
+        'couple.title': d.couple.title,
+        'couple.names': coupleNames,
+        'couple.namesBreak': `${d.couple.groom.nickname} <br>&amp; ${d.couple.bride.nickname}`,
+        'couple.monogram': d.couple.monogram,
+        'couple.weddingDateShort': d.couple.weddingDateShort,
+        
+        'couple.groom.nickname': d.couple.groom.nickname,
+        'couple.groom.fullname': d.couple.groom.fullname,
+        'couple.groom.parents': d.couple.groom.parents,
+        'couple.groom.instagram': d.couple.groom.instagram,
+        'couple.groom.photo': d.couple.groom.photo,
+        
+        'couple.bride.nickname': d.couple.bride.nickname,
+        'couple.bride.fullname': d.couple.bride.fullname,
+        'couple.bride.parents': d.couple.bride.parents,
+        'couple.bride.instagram': d.couple.bride.instagram,
+        'couple.bride.photo': d.couple.bride.photo,
+
+        'quotes.fullHtml': quoteHtml,
+        'quotes.text': d.quotes?.text || '',
+        'quotes.source': d.quotes?.source || '',
+
+        'greetings.salam': d.greetings?.salam || '',
+        'greetings.intro': d.greetings?.intro || '',
+
+        'countdown.title': d.countdown?.title || '',
+        'countdown.quote': d.countdown?.quote || '',
+
+        'story.title': d.story?.title || '',
+        'story.story1Title': d.story?.story1Title || '',
+        'story.story1Desc': d.story?.story1Desc || '',
+        'story.story2Title': d.story?.story2Title || '',
+        'story.story2Desc': d.story?.story2Desc || '',
+        'story.story3Title': d.story?.story3Title || '',
+        'story.story3Desc': d.story?.story3Desc || '',
+        
+        'photos.coverBg': d.photos.coverBg,
+        'photos.mainCouple': d.photos.mainCouple,
+        'photos.storyPhoto': d.photos.storyPhoto,
+        
+        'events.countdownTarget': d.events.countdownTarget,
+        'events.akad.title': d.events.akad.title,
+        'events.akad.dayDate': d.events.akad.dayDate,
+        'events.akad.time': d.events.akad.time,
+        'events.akad.placeTitle': d.events.akad.placeTitle,
+        'events.akad.address': d.events.akad.address,
+        'events.akad.placeHtml': `Tempat : <span class="niku-multiline"><strong>${d.events.akad.placeTitle || 'KEDIAMAN MEMPELAI'}</strong><br class="niku-lb">${(d.events.akad.address || '').replace(/\n/g, '<br class="niku-lb">')}</span>`,
+        'events.akad.mapsUrl': d.events.akad.mapsUrl,
+        
+        'events.resepsi.title': d.events.resepsi.title,
+        'events.resepsi.dayDate': d.events.resepsi.dayDate,
+        'events.resepsi.time': d.events.resepsi.time,
+        'events.resepsi.placeTitle': d.events.resepsi.placeTitle,
+        'events.resepsi.address': d.events.resepsi.address,
+        'events.resepsi.placeHtml': `Tempat : <span class="niku-multiline"><strong>${d.events.resepsi.placeTitle || 'KEDIAMAN MEMPELAI'}<br class="niku-lb"></strong>${(d.events.resepsi.address || '').replace(/\n/g, '<br class="niku-lb">')}</span>`,
+        'events.resepsi.mapsUrl': d.events.resepsi.mapsUrl,
+        
+        'gifts.title': d.gifts?.title || 'Amplop Digital',
+        'gifts.description': d.gifts?.description || '',
+        'gifts.bankGroom.accountNumber': (d.gifts.bankGroom || d.gifts.bank).accountNumber,
+        'gifts.bankGroom.accountHolderWithNick': `${(d.gifts.bankGroom || d.gifts.bank).accountHolder} (${d.couple.groom.nickname || 'Mempelai Pria'})`,
+        'gifts.bankBride.accountNumber': d.gifts.bankBride ? d.gifts.bankBride.accountNumber : '',
+        'gifts.bankBride.accountHolderWithNick': d.gifts.bankBride ? `${d.gifts.bankBride.accountHolder} (${d.couple.bride.nickname || 'Mempelai Wanita'})` : '',
+        
+        'gifts.physicalGift.recipientName': d.gifts.physicalGift ? d.gifts.physicalGift.recipientName : '',
+        'gifts.physicalGift.phone': d.gifts.physicalGift ? d.gifts.physicalGift.phone : '',
+        'gifts.physicalGift.address': d.gifts.physicalGift ? d.gifts.physicalGift.address : '',
+
+        'rsvp.title': d.rsvp?.title || 'Ucapkan Sesuatu',
+        'rsvp.subtitle': d.rsvp?.subtitle || 'Berikan Ucapan & Doa Restu',
+
+        'closing.message': d.closing?.message || '',
+        'closing.salam': d.closing?.salam || '',
+        
+        'audio.src': d.audio.src
+    };
+
+    // 1. Apply data-bind (innerText)
+    document.querySelectorAll('[data-bind]').forEach(el => {
+        const key = el.getAttribute('data-bind');
+        if (bindings[key] !== undefined) {
+            el.innerText = bindings[key];
+        }
     });
 
-    // Groom & Bride parents
-    const groomParents = document.querySelector('.ayah-marker[data-idb-mempelai-side="pria"]')?.closest('.elementor-widget-text-editor');
-    if (groomParents) {
-        groomParents.querySelector('.elementor-widget-container').innerHTML = d.couple.groom.parents;
-    }
-    const brideParents = document.querySelector('.ayah-marker[data-idb-mempelai-side="wanita"]')?.closest('.elementor-widget-text-editor');
-    if (brideParents) {
-        brideParents.querySelector('.elementor-widget-container').innerHTML = d.couple.bride.parents;
-    }
-
-    // Akad & Resepsi
-    const headings = document.querySelectorAll('.elementor-heading-title');
-    headings.forEach(el => {
-        if (el.innerText.includes('Senin, 28 Desember 2026')) {
-            el.innerText = d.events.akad.dayDate;
+    // 2. Apply data-bind-html (innerHTML)
+    document.querySelectorAll('[data-bind-html]').forEach(el => {
+        const key = el.getAttribute('data-bind-html');
+        if (bindings[key] !== undefined) {
+            el.innerHTML = bindings[key];
         }
     });
 
-    // Maps Links
-    const akadMapBtn = document.querySelector('a[aria-label="Akad Nikah"]');
-    if (akadMapBtn && d.events.akad.mapsUrl) {
-        akadMapBtn.href = d.events.akad.mapsUrl;
-    }
-    const resepsiMapBtn = document.querySelector('a[aria-label="Resepsi"]');
-    if (resepsiMapBtn && d.events.resepsi.mapsUrl) {
-        resepsiMapBtn.href = d.events.resepsi.mapsUrl;
-    }
+    // 3. Apply data-bind-img (src & srcset)
+    document.querySelectorAll('[data-bind-img]').forEach(el => {
+        const key = el.getAttribute('data-bind-img');
+        if (bindings[key]) {
+            el.src = bindings[key];
+            el.srcset = bindings[key];
+        }
+    });
 
-    // Rekening 1: Groom (Mempelai Pria)
-    const groomBank = d.gifts.bankGroom || d.gifts.bank;
-    if (groomBank) {
-        const rekNum = document.querySelector('.no-rekening-marker');
-        if (rekNum) rekNum.innerText = groomBank.accountNumber;
-        const rekName = document.querySelector('.idb-copy-rek__name');
-        if (rekName) rekName.innerText = `${groomBank.accountHolder} (${d.couple.groom.nickname || 'Mempelai Pria'})`;
-        const copyBox = document.querySelector('#idb-copy-rek-4f00a6c9-0');
-        if (copyBox) copyBox.setAttribute('data-copy', groomBank.accountNumber);
-    }
+    // 4. Apply data-bind-bg (backgroundImage)
+    document.querySelectorAll('[data-bind-bg]').forEach(el => {
+        const key = el.getAttribute('data-bind-bg');
+        if (bindings[key]) {
+            el.style.backgroundImage = `url("${bindings[key]}")`;
+        }
+    });
 
-    // Rekening 2: Bride (Mempelai Wanita)
-    const brideBank = d.gifts.bankBride;
-    if (brideBank) {
-        const rekNumBride = document.querySelector('.no-rekening-marker-bride');
-        if (rekNumBride) rekNumBride.innerText = brideBank.accountNumber;
-        const rekNameBride = document.querySelector('.idb-copy-rek__name-bride');
-        if (rekNameBride) rekNameBride.innerText = `${brideBank.accountHolder} (${d.couple.bride.nickname || 'Mempelai Wanita'})`;
-        const copyBoxBride = document.querySelector('#idb-copy-rek-bride');
-        if (copyBoxBride) copyBoxBride.setAttribute('data-copy', brideBank.accountNumber);
-    }
+    // 5. Apply data-bind-href (href)
+    document.querySelectorAll('[data-bind-href]').forEach(el => {
+        const key = el.getAttribute('data-bind-href');
+        if (bindings[key]) {
+            el.href = bindings[key];
+        }
+    });
 
-    // Kado Fisik
-    const giftValues = document.querySelectorAll('.idb-kirim-hadiah__value');
-    if (giftValues.length >= 3) {
-        giftValues[0].innerText = d.gifts.physicalGift.recipientName;
-        giftValues[1].innerText = d.gifts.physicalGift.phone;
-        giftValues[2].innerText = d.gifts.physicalGift.address;
-    }
+    // 6. Apply data-bind-copy (data-copy attribute for clipboard copy boxes)
+    document.querySelectorAll('[data-bind-copy]').forEach(el => {
+        const key = el.getAttribute('data-bind-copy');
+        if (bindings[key]) {
+            el.setAttribute('data-copy', bindings[key]);
+        }
+    });
 
-    // Dynamic Photos Injection
-    if (d.photos && d.photos.mainCouple) {
-        document.querySelectorAll('img[src*="main-couple"], .elementor-element-68beddea img').forEach(img => {
-            img.src = d.photos.mainCouple;
-            img.srcset = d.photos.mainCouple;
-        });
-    }
-    if (d.couple && d.couple.groom && d.couple.groom.photo) {
-        document.querySelectorAll('img[src*="groom"], .elementor-element-1dd7eecf img').forEach(img => {
-            img.src = d.couple.groom.photo;
-            img.srcset = d.couple.groom.photo;
-        });
-    }
-    if (d.couple && d.couple.bride && d.couple.bride.photo) {
-        document.querySelectorAll('img[src*="bride"], .elementor-element-504750fb img').forEach(img => {
-            img.src = d.couple.bride.photo;
-            img.srcset = d.couple.bride.photo;
-        });
-    }
-    if (d.photos && d.photos.storyPhoto) {
-        document.querySelectorAll('img[src*="story"]').forEach(img => {
-            img.src = d.photos.storyPhoto;
-            img.srcset = d.photos.storyPhoto;
-        });
-    }
+    // 7. Apply data-bind-audio (audio src)
+    document.querySelectorAll('[data-bind-audio]').forEach(el => {
+        const key = el.getAttribute('data-bind-audio');
+        if (bindings[key]) {
+            el.src = bindings[key];
+            const audioParent = el.closest('audio');
+            if (audioParent && audioParent.load) {
+                audioParent.load();
+            }
+        }
+    });
+
+    // 8. Apply data-bind-countdown (countdown target timestamp)
+    document.querySelectorAll('[data-bind-countdown]').forEach(el => {
+        if (d.events && d.events.countdownTarget) {
+            try {
+                const targetDate = new Date(d.events.countdownTarget);
+                if (!isNaN(targetDate.getTime())) {
+                    el.setAttribute('data-target', targetDate.getTime().toString());
+                    el.setAttribute('data-target-iso', targetDate.toISOString());
+                }
+            } catch(e) {}
+        }
+    });
 }
 
 function initRsvpSystem() {
@@ -412,13 +522,17 @@ function initRsvpSystem() {
     loadWishes();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    applyWeddingData();
-    fetchLiveConfig();
-    initRsvpSystem();
-    setTimeout(applyWeddingData, 100);
-    setTimeout(applyWeddingData, 400);
-    setTimeout(applyWeddingData, 1200);
-});
-window.addEventListener('load', applyWeddingData);
+if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+        applyWeddingData();
+        fetchLiveConfig();
+        initRsvpSystem();
+        setTimeout(applyWeddingData, 100);
+        setTimeout(applyWeddingData, 400);
+        setTimeout(applyWeddingData, 1200);
+    });
+}
+if (typeof window !== 'undefined') {
+    window.addEventListener('load', applyWeddingData);
+}
 

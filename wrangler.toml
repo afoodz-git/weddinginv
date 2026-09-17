@@ -6,4 +6,4 @@ compatibility_date = "2024-09-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "wedding-db"
-database_id = "YOUR_D1_DATABASE_ID_HERE"
+database_id = "2e4756fb-7385-4bb9-b629-918de093542b"
