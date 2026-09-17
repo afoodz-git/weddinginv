@@ -336,18 +336,63 @@ function applyWeddingData() {
         }
     });
 
-    // 8. Apply data-bind-countdown (countdown target timestamp)
-    document.querySelectorAll('[data-bind-countdown]').forEach(el => {
-        if (d.events && d.events.countdownTarget) {
-            try {
-                const targetDate = new Date(d.events.countdownTarget);
-                if (!isNaN(targetDate.getTime())) {
-                    el.setAttribute('data-target', targetDate.getTime().toString());
-                    el.setAttribute('data-target-iso', targetDate.toISOString());
-                }
-            } catch(e) {}
+    // 8. Apply data-bind-countdown & Live Real-Time Countdown Engine
+    initLiveCountdown(d);
+}
+
+let _countdownTimerInterval = null;
+
+function initLiveCountdown(d) {
+    if (_countdownTimerInterval) {
+        clearInterval(_countdownTimerInterval);
+        _countdownTimerInterval = null;
+    }
+
+    const countdownElements = document.querySelectorAll('[data-bind-countdown], .idb-countdown');
+    if (!countdownElements || !countdownElements.length) return;
+
+    function tick() {
+        const rawTarget = (d && d.events && d.events.countdownTarget) || '2027-01-01T08:00:00+07:00';
+        let targetDate = new Date(rawTarget);
+        if (isNaN(targetDate.getTime())) {
+            targetDate = new Date('2027-01-01T08:00:00+07:00');
         }
-    });
+
+        const now = Date.now();
+        const distance = Math.max(0, targetDate.getTime() - now);
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        const pad = (n) => (n < 10 ? '0' : '') + n;
+        const timeMap = {
+            days: String(days),
+            hours: pad(hours),
+            minutes: pad(minutes),
+            seconds: pad(seconds)
+        };
+
+        countdownElements.forEach(el => {
+            el.setAttribute('data-target', targetDate.getTime().toString());
+            el.setAttribute('data-target-iso', targetDate.toISOString());
+
+            const items = el.querySelectorAll('.idb-countdown__item');
+            items.forEach(item => {
+                const part = item.getAttribute('data-part');
+                const numEl = item.querySelector('[data-role="num"]');
+                if (part && numEl && timeMap[part] !== undefined) {
+                    if (numEl.textContent !== timeMap[part]) {
+                        numEl.textContent = timeMap[part];
+                    }
+                }
+            });
+        });
+    }
+
+    tick();
+    _countdownTimerInterval = setInterval(tick, 1000);
 }
 
 function initRsvpSystem() {
