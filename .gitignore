@@ -1,0 +1,6 @@
+# Scratch files
+scratch_*.html
+
+# OS files
+.DS_Store
+Thumbs.db
