@@ -78,22 +78,22 @@ let WEDDING_DATA = {
         title: "Amplop Digital",
         description: "Doa restu Anda merupakan karunia yang sangat berarti bagi kami, dan jika memberi adalah ungkapan tanda kasih, Anda dapat memberi kado secara cashless.",
         bank: {
-            bankName: "BCA",
-            logo: "assets/images/bank-bca.webp",
+            bankName: "SeaBank",
+            logo: "assets/images/bank-seabank.svg",
             accountNumber: "1234567890",
             accountHolder: "Nama Pemilik Rekening"
         },
         bankGroom: {
-            bankName: "BCA",
-            logo: "assets/images/bank-bca.webp",
+            bankName: "SeaBank",
+            logo: "assets/images/bank-seabank.svg",
             accountNumber: "1234567890",
-            accountHolder: "Nama Pemilik Rekening (Pria)"
+            accountHolder: "Fahmi Fakih"
         },
         bankBride: {
-            bankName: "BCA",
-            logo: "assets/images/bank-bca.webp",
+            bankName: "SeaBank",
+            logo: "assets/images/bank-seabank.svg",
             accountNumber: "0987654321",
-            accountHolder: "Nama Pemilik Rekening (Wanita)"
+            accountHolder: "Okta"
         },
         physicalGift: {
             recipientName: "Nama Penerima Kado",
@@ -257,8 +257,10 @@ function applyWeddingData() {
         
         'gifts.title': d.gifts?.title || 'Amplop Digital',
         'gifts.description': d.gifts?.description || '',
+        'gifts.bankGroom.logo': (d.gifts.bankGroom || d.gifts.bank).logo || 'assets/images/bank-seabank.svg',
         'gifts.bankGroom.accountNumber': (d.gifts.bankGroom || d.gifts.bank).accountNumber,
         'gifts.bankGroom.accountHolderWithNick': `${(d.gifts.bankGroom || d.gifts.bank).accountHolder} (${d.couple.groom.nickname || 'Mempelai Pria'})`,
+        'gifts.bankBride.logo': d.gifts.bankBride?.logo || (d.gifts.bankGroom || d.gifts.bank).logo || 'assets/images/bank-seabank.svg',
         'gifts.bankBride.accountNumber': d.gifts.bankBride ? d.gifts.bankBride.accountNumber : '',
         'gifts.bankBride.accountHolderWithNick': d.gifts.bankBride ? `${d.gifts.bankBride.accountHolder} (${d.couple.bride.nickname || 'Mempelai Wanita'})` : '',
         
