@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 		<meta name='robots' content='noindex, nofollow' />
-    <script src="config.js"></script>
+    <script src="config.js?v=2.0"></script>
 
 	<title>The Wedding of Habib &amp; Adiba</title>
 	<meta name="description" content="Undangan Pernikahan Habib &amp; Adiba - Senin, 28 Desember 2026" />
@@ -1527,5 +1527,39 @@ body[style*="position:fixed"] #kolom{
 	display : none!important;
 	}
 </style>
+
+<script src="config.js?v=2.0"></script>
+<script>
+(function() {
+    function injectGuestName() {
+        var params = new URLSearchParams(window.location.search);
+        var guest = params.get('to') || params.get('u') || params.get('guest') || params.get('nama');
+        if (guest && guest.trim().length > 0) {
+            var name = decodeURIComponent(guest.replace(/\+/g, ' ')).trim();
+            // Target all cover headings and markers
+            var els = document.querySelectorAll('.tamu-undangan-marker, .elementor-element-33af279f .elementor-heading-title, .elementor-element-33af279f h2');
+            els.forEach(function(el) {
+                el.innerText = name;
+            });
+            // General fallback
+            document.querySelectorAll('.elementor-heading-title').forEach(function(el) {
+                var txt = (el.innerText || '').trim();
+                if (txt === 'Nama Tamu' || txt === 'Tamu Undangan') {
+                    el.innerText = name;
+                }
+            });
+            var rsvpInput = document.querySelector('[data-rsvp="name"]');
+            if (rsvpInput && (!rsvpInput.value || rsvpInput.value === 'Nama Tamu' || rsvpInput.value === 'Tamu Undangan')) {
+                rsvpInput.value = name;
+            }
+        }
+    }
+    injectGuestName();
+    document.addEventListener('DOMContentLoaded', injectGuestName);
+    window.addEventListener('load', injectGuestName);
+    var timer = setInterval(injectGuestName, 150);
+    setTimeout(function() { clearInterval(timer); }, 4000);
+})();
+</script>
 	</body>
 </html>
