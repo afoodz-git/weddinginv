@@ -1334,7 +1334,7 @@
     </form>
 </div>
 
-<script src="config.js?v=4.2"></script>
+<script src="config.js?v=4.3"></script>
 <script>
     const BASE_DOMAIN = window.location.origin + window.location.pathname.replace('admin.html', 'index.html');
     const API_CONFIG_URL = 'https://wedding-api.fahmifakih89.workers.dev/api/config';
@@ -1380,12 +1380,12 @@
         photo_story: "assets/images/couple-main.jpg",
         gift_title: "Amplop Digital",
         gift_description: "Doa restu Anda merupakan karunia yang sangat berarti bagi kami, dan jika memberi adalah ungkapan tanda kasih, Anda dapat memberi kado secara cashless.",
-        bank_name: "BCA",
-        bank_number: "1234567890",
-        bank_holder: "Nama Pemilik Rekening (Pria)",
-        bank_name_bride: "BCA",
-        bank_number_bride: "0987654321",
-        bank_holder_bride: "Nama Pemilik Rekening (Wanita)",
+        bank_name: "SeaBank",
+        bank_number: "901234567890",
+        bank_holder: "Fahmi Fakih",
+        bank_name_bride: "SeaBank",
+        bank_number_bride: "909876543210",
+        bank_holder_bride: "Okta",
         gift_recipient: "",
         gift_phone: "",
         gift_address: ""
@@ -1842,22 +1842,22 @@
                 title: document.getElementById('gift_title').value.trim() || "Amplop Digital",
                 description: document.getElementById('gift_description').value.trim() || "Doa restu Anda merupakan karunia yang sangat berarti bagi kami, dan jika memberi adalah ungkapan tanda kasih, Anda dapat memberi kado secara cashless.",
                 bank: {
-                    bankName: document.getElementById('bank_name').value.trim() || "BCA",
-                    logo: "assets/images/bank-bca.webp",
-                    accountNumber: document.getElementById('bank_number').value.trim() || "1234567890",
-                    accountHolder: document.getElementById('bank_holder').value.trim() || "Nama Pemilik Rekening"
+                    bankName: document.getElementById('bank_name').value.trim() || "SeaBank",
+                    logo: "assets/images/bank-seabank.svg",
+                    accountNumber: document.getElementById('bank_number').value.trim() || "901234567890",
+                    accountHolder: document.getElementById('bank_holder').value.trim() || "Fahmi Fakih"
                 },
                 bankGroom: {
-                    bankName: document.getElementById('bank_name').value.trim() || "BCA",
-                    logo: "assets/images/bank-bca.webp",
-                    accountNumber: document.getElementById('bank_number').value.trim() || "1234567890",
-                    accountHolder: document.getElementById('bank_holder').value.trim() || "Nama Pemilik Rekening (Pria)"
+                    bankName: document.getElementById('bank_name').value.trim() || "SeaBank",
+                    logo: "assets/images/bank-seabank.svg",
+                    accountNumber: document.getElementById('bank_number').value.trim() || "901234567890",
+                    accountHolder: document.getElementById('bank_holder').value.trim() || "Fahmi Fakih"
                 },
                 bankBride: {
-                    bankName: document.getElementById('bank_name_bride').value.trim() || "BCA",
-                    logo: "assets/images/bank-bca.webp",
-                    accountNumber: document.getElementById('bank_number_bride').value.trim() || "0987654321",
-                    accountHolder: document.getElementById('bank_holder_bride').value.trim() || "Nama Pemilik Rekening (Wanita)"
+                    bankName: document.getElementById('bank_name_bride').value.trim() || "SeaBank",
+                    logo: "assets/images/bank-seabank.svg",
+                    accountNumber: document.getElementById('bank_number_bride').value.trim() || "909876543210",
+                    accountHolder: document.getElementById('bank_holder_bride').value.trim() || "Okta"
                 },
                 physicalGift: {
                     recipientName: document.getElementById('gift_recipient').value.trim() || "",
