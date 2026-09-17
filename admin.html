@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Admin Panel - Edit Undangan & Foto</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding-bottom: 60px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 16px 0;
+            border-bottom: 1px solid #334155;
+        }
+        .header h1 { font-size: 1.4rem; color: #38bdf8; font-weight: 700; margin-bottom: 4px; }
+        .header p { font-size: 0.85rem; color: #94a3b8; }
+
+        .card {
+            background: #1e293b;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 18px;
+            border: 1px solid #334155;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .form-group {
+            margin-bottom: 14px;
+        }
+        label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+        input, textarea, select {
+            width: 100%;
+            background: #0f172a;
+            border: 1px solid #475569;
+            border-radius: 10px;
+            padding: 12px 14px;
+            color: #fff;
+            font-size: 0.9rem;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.2s;
+        }
+        input:focus, textarea:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+        }
+        textarea { resize: vertical; min-height: 70px; }
+
+        /* Photo Upload & Preview Box */
+        .photo-upload-box {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-top: 8px;
+            background: #0f172a;
+            border: 1px dashed #475569;
+            padding: 12px;
+            border-radius: 12px;
+        }
+        .photo-preview {
+            width: 65px;
+            height: 65px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 2px solid #38bdf8;
+            background: #1e293b;
+            flex-shrink: 0;
+        }
+        .file-btn-wrapper {
+            flex-grow: 1;
+        }
+        .file-btn-wrapper input[type="file"] {
+            display: none;
+        }
+        .btn-upload {
+            display: inline-block;
+            background: #334155;
+            color: #38bdf8;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+            border: 1px solid #475569;
+        }
+
+        .btn-save {
+            width: 100%;
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: #fff;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+            margin-top: 10px;
+        }
+        .btn-preview {
+            display: block;
+            text-align: center;
+            width: 100%;
+            background: #334155;
+            color: #f8fafc;
+            padding: 13px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-decoration: none;
+            margin-top: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>⚙️ Pengaturan Undangan & Foto</h1>
+        <p>Ganti foto, nama, tanggal, dan rekening langsung dari HP</p>
+    </div>
+
+    <form id="adminForm">
+
+        <!-- 1. GANTI FOTO-FOTO (CLOUD UPLOAD IMGBB / LOCAL) -->
+        <div class="card">
+            <div class="card-title">📸 Ganti Foto Undangan (Cloud ImgBB)</div>
+            
+            <div class="form-group" style="background: rgba(56, 189, 248, 0.1); padding: 12px; border-radius: 10px; border: 1px solid rgba(56, 189, 248, 0.3); margin-bottom: 16px;">
+                <label style="color: #38bdf8; font-weight: 600;">🔑 ImgBB API Key (Cloud Storage Gratis)</label>
+                <input type="text" id="imgbb_key" value="bd55f725fc71f21f49b55f8e7f293fd6" placeholder="Masukkan API Key ImgBB">
+                <small style="color: #94a3b8; font-size: 0.75rem; display: block; margin-top: 4px;">
+                    ✅ API Key aktif! Setiap foto yang dipilih dari galeri HP akan langsung otomatis terupload ke Cloud ImgBB.
+                </small>
+            </div>
+
+            <!-- Foto Utama Berdua (Cover & Header) -->
+            <div class="form-group">
+                <label>Foto Utama Berdua (Cover & Header)</label>
+                <div class="photo-upload-box">
+                    <img id="prev_mainCouple" src="assets/images/main-couple.jpg" class="photo-preview" alt="Preview">
+                    <div class="file-btn-wrapper">
+                        <label for="file_mainCouple" class="btn-upload" id="lbl_mainCouple">📁 Upload dari Galeri HP</label>
+                        <input type="file" id="file_mainCouple" accept="image/*" onchange="handleImageSelection(this, 'prev_mainCouple', 'val_mainCouple', 'lbl_mainCouple')">
+                        <input type="text" id="val_mainCouple" placeholder="URL Foto Utama" style="margin-top: 8px; font-size: 0.8rem; padding: 8px 10px;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Foto Mempelai Pria -->
+            <div class="form-group">
+                <label>Foto Mempelai Pria</label>
+                <div class="photo-upload-box">
+                    <img id="prev_groom" src="assets/images/groom.jpg" class="photo-preview" alt="Preview">
+                    <div class="file-btn-wrapper">
+                        <label for="file_groom" class="btn-upload" id="lbl_groom">📁 Upload dari Galeri HP</label>
+                        <input type="file" id="file_groom" accept="image/*" onchange="handleImageSelection(this, 'prev_groom', 'val_groom', 'lbl_groom')">
+                        <input type="text" id="val_groom" placeholder="URL Foto Groom" style="margin-top: 8px; font-size: 0.8rem; padding: 8px 10px;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Foto Mempelai Wanita -->
+            <div class="form-group">
+                <label>Foto Mempelai Wanita</label>
+                <div class="photo-upload-box">
+                    <img id="prev_bride" src="assets/images/bride.jpg" class="photo-preview" alt="Preview">
+                    <div class="file-btn-wrapper">
+                        <label for="file_bride" class="btn-upload" id="lbl_bride">📁 Upload dari Galeri HP</label>
+                        <input type="file" id="file_bride" accept="image/*" onchange="handleImageSelection(this, 'prev_bride', 'val_bride', 'lbl_bride')">
+                        <input type="text" id="val_bride" placeholder="URL Foto Bride" style="margin-top: 8px; font-size: 0.8rem; padding: 8px 10px;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Foto Love Story -->
+            <div class="form-group">
+                <label>Foto Cerita / Love Story</label>
+                <div class="photo-upload-box">
+                    <img id="prev_story" src="assets/images/story-bg.jpg" class="photo-preview" alt="Preview">
+                    <div class="file-btn-wrapper">
+                        <label for="file_story" class="btn-upload" id="lbl_story">📁 Upload dari Galeri HP</label>
+                        <input type="file" id="file_story" accept="image/*" onchange="handleImageSelection(this, 'prev_story', 'val_story', 'lbl_story')">
+                        <input type="text" id="val_story" placeholder="URL Foto Story" style="margin-top: 8px; font-size: 0.8rem; padding: 8px 10px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. MEMPELAI PRIA -->
+        <div class="card">
+            <div class="card-title">🤵 Mempelai Pria</div>
+            <div class="form-group">
+                <label>Nama Panggilan</label>
+                <input type="text" id="groom_nick" placeholder="Contoh: Habib">
+            </div>
+            <div class="form-group">
+                <label>Nama Lengkap & Gelar</label>
+                <input type="text" id="groom_full" placeholder="Contoh: Habib Yulianto, S.Kom">
+            </div>
+            <div class="form-group">
+                <label>Nama Orang Tua</label>
+                <input type="text" id="groom_parents" placeholder="Putra Kedua dari Bapak ... & Ibu ...">
+            </div>
+        </div>
+
+        <!-- 3. MEMPELAI WANITA -->
+        <div class="card">
+            <div class="card-title">👰 Mempelai Wanita</div>
+            <div class="form-group">
+                <label>Nama Panggilan</label>
+                <input type="text" id="bride_nick" placeholder="Contoh: Adiba">
+            </div>
+            <div class="form-group">
+                <label>Nama Lengkap & Gelar</label>
+                <input type="text" id="bride_full" placeholder="Contoh: Adiba Putri Syakila">
+            </div>
+            <div class="form-group">
+                <label>Nama Orang Tua</label>
+                <input type="text" id="bride_parents" placeholder="Putri Pertama dari Bapak ... & Ibu ...">
+            </div>
+        </div>
+
+        <!-- 4. INISIAL & TANGGAL SINGKAT -->
+        <div class="card">
+            <div class="card-title">💍 Inisial & Tanggal</div>
+            <div class="form-group">
+                <label>Inisial Monogram (2 Huruf)</label>
+                <input type="text" id="monogram" placeholder="Contoh: HA atau F&O">
+            </div>
+            <div class="form-group">
+                <label>Tanggal Singkat</label>
+                <input type="text" id="date_short" placeholder="Contoh: 28. 12. 2026">
+            </div>
+        </div>
+
+        <!-- 5. ACARA AKAD & RESEPSI -->
+        <div class="card">
+            <div class="card-title">📅 Akad Nikah</div>
+            <div class="form-group">
+                <label>Hari & Tanggal</label>
+                <input type="text" id="akad_date" placeholder="Contoh: Senin, 28 Desember 2026">
+            </div>
+            <div class="form-group">
+                <label>Waktu / Jam</label>
+                <input type="text" id="akad_time" placeholder="Contoh: Pukul 08.00 WIB">
+            </div>
+            <div class="form-group">
+                <label>Tempat & Alamat</label>
+                <textarea id="akad_place" placeholder="Contoh: Kediaman Mempelai Wanita, Ds Pagu, Kediri"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Link Google Maps</label>
+                <input type="text" id="akad_maps" placeholder="https://maps.app.goo.gl/...">
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">🎉 Resepsi</div>
+            <div class="form-group">
+                <label>Hari & Tanggal</label>
+                <input type="text" id="resepsi_date" placeholder="Contoh: Senin, 28 Desember 2026">
+            </div>
+            <div class="form-group">
+                <label>Waktu / Jam</label>
+                <input type="text" id="resepsi_time" placeholder="Contoh: Pukul 10.00 WIB – Selesai">
+            </div>
+            <div class="form-group">
+                <label>Tempat & Alamat</label>
+                <textarea id="resepsi_place" placeholder="Contoh: Gedung / Rumah..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Link Google Maps</label>
+                <input type="text" id="resepsi_maps" placeholder="https://maps.app.goo.gl/...">
+            </div>
+        </div>
+
+        <!-- 6. REKENING & KADO -->
+        <div class="card">
+            <div class="card-title">💳 Rekening & Kirim Kado</div>
+            <div class="form-group">
+                <label>Nama Bank</label>
+                <input type="text" id="bank_name" placeholder="BCA / BRI / Mandiri">
+            </div>
+            <div class="form-group">
+                <label>Nomor Rekening</label>
+                <input type="text" id="bank_number" placeholder="Contoh: 12345678">
+            </div>
+            <div class="form-group">
+                <label>Atas Nama (Pemilik Rekening)</label>
+                <input type="text" id="bank_holder" placeholder="Contoh: Habib Yulianto">
+            </div>
+            <div class="form-group">
+                <label>Nama Penerima Paket Kado</label>
+                <input type="text" id="gift_recipient" placeholder="Contoh: Habib Yulianto">
+            </div>
+            <div class="form-group">
+                <label>No. HP Penerima</label>
+                <input type="text" id="gift_phone" placeholder="081234567890">
+            </div>
+            <div class="form-group">
+                <label>Alamat Kirim Kado Fisik</label>
+                <textarea id="gift_address" placeholder="Alamat lengkap pengiriman..."></textarea>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+            <button type="submit" class="btn-save" style="margin-top: 0;">💾 Simpan</button>
+            <button type="button" onclick="downloadConfigJs()" class="btn-save" style="margin-top: 0; background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);">📥 Unduh config.js</button>
+        </div>
+        <button type="button" onclick="copyConfigJs()" class="btn-preview" style="background: #3b82f6; color: white; border: none; cursor: pointer; font-size: 0.9rem; font-weight: 600;">📋 Salin Kode config.js</button>
+        <a href="index.html" class="btn-preview" target="_blank">👁️ Buka / Test Undangan</a>
+    </form>
+</div>
+
+<script src="config.js"></script>
+<script>
+    // Handle Image: Compress and Upload to ImgBB if API Key is set
+    async function handleImageSelection(input, previewId, valueHolderId, labelId) {
+        if (!input.files || !input.files[0]) return;
+        const file = input.files[0];
+        const apiKey = document.getElementById('imgbb_key').value.trim();
+        const lbl = document.getElementById(labelId);
+
+        // Preview local immediate
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = async function() {
+                const canvas = document.createElement('canvas');
+                const MAX_WIDTH = 1200;
+                const scaleSize = MAX_WIDTH / img.width;
+                const finalWidth = (img.width > MAX_WIDTH) ? MAX_WIDTH : img.width;
+                const finalHeight = (img.width > MAX_WIDTH) ? (img.height * scaleSize) : img.height;
+                
+                canvas.width = finalWidth;
+                canvas.height = finalHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, finalWidth, finalHeight);
+
+                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.85);
+                document.getElementById(previewId).src = compressedBase64;
+
+                // If ImgBB API Key provided, upload to ImgBB
+                if (apiKey) {
+                    if (lbl) lbl.innerText = "⏳ Mengupload...";
+                    try {
+                        const base64Clean = compressedBase64.replace(/^data:image\/[a-z]+;base64,/, '');
+                        const formData = new FormData();
+                        formData.append('image', base64Clean);
+
+                        const res = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+                            method: 'POST',
+                            body: formData
+                        });
+                        const data = await res.json();
+
+                        if (data.success) {
+                            const publicUrl = data.data.url;
+                            document.getElementById(valueHolderId).value = publicUrl;
+                            document.getElementById(previewId).src = publicUrl;
+                            if (lbl) lbl.innerText = "✅ Berhasil Diupload!";
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Foto Terupload ke Cloud!',
+                                text: 'Link foto publik berhasil didapatkan.',
+                                timer: 1500,
+                                showConfirmButton: false,
+                                background: '#1e293b',
+                                color: '#fff'
+                            });
+                        } else {
+                            throw new Error(data.error?.message || 'Gagal upload ke ImgBB');
+                        }
+                    } catch(err) {
+                        if (lbl) lbl.innerText = "⚠️ Gagal Cloud (Pakai Lokal)";
+                        document.getElementById(valueHolderId).value = compressedBase64;
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Upload Cloud Gagal',
+                            text: 'Gagal mengupload ke ImgBB (' + err.message + '). Foto tetap disimpan sebagai data lokal.',
+                            background: '#1e293b',
+                            color: '#fff'
+                        });
+                    }
+                } else {
+                    document.getElementById(valueHolderId).value = compressedBase64;
+                    if (lbl) lbl.innerText = "📁 Pilih Foto Lain";
+                }
+            };
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // Load data awal dari config / localStorage
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedKey = localStorage.getItem('IMGBB_API_KEY') || 'bd55f725fc71f21f49b55f8e7f293fd6';
+        if (savedKey) document.getElementById('imgbb_key').value = savedKey;
+
+        const saved = JSON.parse(localStorage.getItem('CUSTOM_WEDDING_DATA') || 'null') || WEDDING_DATA;
+        
+        // Photos
+        if (saved.photos) {
+            if (saved.photos.mainCouple) {
+                document.getElementById('prev_mainCouple').src = saved.photos.mainCouple;
+                document.getElementById('val_mainCouple').value = saved.photos.mainCouple;
+            }
+            if (saved.photos.storyPhoto) {
+                document.getElementById('prev_story').src = saved.photos.storyPhoto;
+                document.getElementById('val_story').value = saved.photos.storyPhoto;
+            }
+        }
+        if (saved.couple?.groom?.photo) {
+            document.getElementById('prev_groom').src = saved.couple.groom.photo;
+            document.getElementById('val_groom').value = saved.couple.groom.photo;
+        }
+        if (saved.couple?.bride?.photo) {
+            document.getElementById('prev_bride').src = saved.couple.bride.photo;
+            document.getElementById('val_bride').value = saved.couple.bride.photo;
+        }
+
+        // Texts
+        document.getElementById('groom_nick').value = saved.couple?.groom?.nickname || '';
+        document.getElementById('groom_full').value = saved.couple?.groom?.fullname || '';
+        document.getElementById('groom_parents').value = (saved.couple?.groom?.parents || '').replace(/<br>/g, ' ');
+
+        document.getElementById('bride_nick').value = saved.couple?.bride?.nickname || '';
+        document.getElementById('bride_full').value = saved.couple?.bride?.fullname || '';
+        document.getElementById('bride_parents').value = (saved.couple?.bride?.parents || '').replace(/<br>/g, ' ');
+
+        document.getElementById('monogram').value = saved.couple?.monogram || '';
+        document.getElementById('date_short').value = saved.couple?.weddingDateShort || '';
+
+        document.getElementById('akad_date').value = saved.events?.akad?.dayDate || '';
+        document.getElementById('akad_time').value = saved.events?.akad?.time || '';
+        document.getElementById('akad_place').value = saved.events?.akad?.address || '';
+        document.getElementById('akad_maps').value = saved.events?.akad?.mapsUrl || '';
+
+        document.getElementById('resepsi_date').value = saved.events?.resepsi?.dayDate || '';
+        document.getElementById('resepsi_time').value = saved.events?.resepsi?.time || '';
+        document.getElementById('resepsi_place').value = saved.events?.resepsi?.address || '';
+        document.getElementById('resepsi_maps').value = saved.events?.resepsi?.mapsUrl || '';
+
+        document.getElementById('bank_name').value = saved.gifts?.bank?.bankName || '';
+        document.getElementById('bank_number').value = saved.gifts?.bank?.accountNumber || '';
+        document.getElementById('bank_holder').value = saved.gifts?.bank?.accountHolder || '';
+
+        document.getElementById('gift_recipient').value = saved.gifts?.physicalGift?.recipientName || '';
+        document.getElementById('gift_phone').value = saved.gifts?.physicalGift?.phone || '';
+        document.getElementById('gift_address').value = saved.gifts?.physicalGift?.address || '';
+    });
+
+    function getFormDataObject() {
+        return {
+            couple: {
+                monogram: document.getElementById('monogram').value || "HA",
+                title: "The Wedding of",
+                weddingDateShort: document.getElementById('date_short').value || "28. 12. 2026",
+                groom: {
+                    nickname: document.getElementById('groom_nick').value,
+                    fullname: document.getElementById('groom_full').value,
+                    parents: document.getElementById('groom_parents').value,
+                    instagram: "https://instagram.com/",
+                    photo: document.getElementById('val_groom').value || "assets/images/groom.jpg"
+                },
+                bride: {
+                    nickname: document.getElementById('bride_nick').value,
+                    fullname: document.getElementById('bride_full').value,
+                    parents: document.getElementById('bride_parents').value,
+                    instagram: "https://instagram.com/",
+                    photo: document.getElementById('val_bride').value || "assets/images/bride.jpg"
+                }
+            },
+            photos: {
+                coverBg: document.getElementById('val_mainCouple').value || "assets/images/cover-bg.webp",
+                mainCouple: document.getElementById('val_mainCouple').value || "assets/images/main-couple.jpg",
+                storyPhoto: document.getElementById('val_story').value || "assets/images/story-bg.jpg"
+            },
+            events: {
+                countdownTarget: "2026-12-28T08:00:00+07:00",
+                akad: {
+                    title: "Akad Nikah",
+                    dayDate: document.getElementById('akad_date').value,
+                    time: document.getElementById('akad_time').value,
+                    placeTitle: "KEDIAMAN MEMPELAI WANITA",
+                    address: document.getElementById('akad_place').value,
+                    mapsUrl: document.getElementById('akad_maps').value
+                },
+                resepsi: {
+                    title: "Resepsi",
+                    dayDate: document.getElementById('resepsi_date').value,
+                    time: document.getElementById('resepsi_time').value,
+                    placeTitle: "KEDIAMAN MEMPELAI WANITA",
+                    address: document.getElementById('resepsi_place').value,
+                    mapsUrl: document.getElementById('resepsi_maps').value
+                }
+            },
+            gifts: {
+                bank: {
+                    bankName: document.getElementById('bank_name').value,
+                    logo: "assets/images/bank-bca.webp",
+                    accountNumber: document.getElementById('bank_number').value,
+                    accountHolder: document.getElementById('bank_holder').value
+                },
+                physicalGift: {
+                    recipientName: document.getElementById('gift_recipient').value,
+                    phone: document.getElementById('gift_phone').value,
+                    address: document.getElementById('gift_address').value
+                }
+            },
+            audio: {
+                src: "assets/audio/howls-moving.mp3"
+            }
+        };
+    }
+
+    // Simpan data ke browser
+    document.getElementById('adminForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const customData = getFormDataObject();
+        const key = document.getElementById('imgbb_key').value.trim();
+        if (key) localStorage.setItem('IMGBB_API_KEY', key);
+
+        try {
+            localStorage.setItem('CUSTOM_WEDDING_DATA', JSON.stringify(customData));
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil Disimpan!',
+                text: 'Data dan foto undangan berhasil diperbarui di browser ini.',
+                timer: 2000,
+                showConfirmButton: false,
+                background: '#1e293b',
+                color: '#fff'
+            });
+        } catch(err) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal Menyimpan',
+                text: 'Ukuran foto terlalu besar. Silakan gunakan ImgBB API Key untuk upload langsung ke cloud.',
+                background: '#1e293b',
+                color: '#fff'
+            });
+        }
+    });
+
+    function generateConfigJsContent() {
+        const d = getFormDataObject();
+        return `// =============================================================================
+// KONFIGURASI DATA UNDANGAN PERNIKAHAN
+// =============================================================================
+
+let WEDDING_DATA = ${JSON.stringify(d, null, 4)};
+
+// Check if localStorage has custom data from admin.html
+const localData = localStorage.getItem('CUSTOM_WEDDING_DATA');
+if (localData) {
+    try {
+        const parsed = JSON.parse(localData);
+        WEDDING_DATA = Object.assign(WEDDING_DATA, parsed);
+    } catch(e) {}
+}
+
+// Fungsi inject data otomatis ke seluruh elemen website
+function applyWeddingData() {
+    const d = WEDDING_DATA;
+    const coupleNames = \`\${d.couple.groom.nickname} & \${d.couple.bride.nickname}\`;
+
+    document.title = \`\${d.couple.title} \${coupleNames}\`;
+
+    // Headings & Monogram
+    document.querySelectorAll('.elementor-heading-title').forEach(el => {
+        const txt = el.innerText.trim();
+        if (txt === 'HA' || txt === 'A&M' || txt === 'A|M') el.innerText = d.couple.monogram;
+        if (txt.includes('Habib & Adiba') || txt.includes('Habib &amp; Adiba')) el.innerText = coupleNames;
+        if (txt === 'Habib Yulianto') el.innerText = d.couple.groom.fullname;
+        if (txt === 'Adiba Putri Syakila') el.innerText = d.couple.bride.fullname;
+    });
+
+    // Subtitle date
+    document.querySelectorAll('.elementor-heading-title').forEach(el => {
+        if (el.innerText.includes('28. 12. 2026') || el.innerText.includes('22 . 09 . 2026')) el.innerText = d.couple.weddingDateShort;
+    });
+
+    // Groom & Bride parents
+    const groomParents = document.querySelector('.ayah-marker[data-idb-mempelai-side="pria"]')?.closest('.elementor-widget-text-editor');
+    if (groomParents) {
+        groomParents.querySelector('.elementor-widget-container').innerHTML = d.couple.groom.parents;
+    }
+    const brideParents = document.querySelector('.ayah-marker[data-idb-mempelai-side="wanita"]')?.closest('.elementor-widget-text-editor');
+    if (brideParents) {
+        brideParents.querySelector('.elementor-widget-container').innerHTML = d.couple.bride.parents;
+    }
+
+    // Akad & Resepsi
+    const akadDate = document.querySelectorAll('.elementor-heading-title');
+    akadDate.forEach(el => {
+        if (el.innerText.includes('Senin, 28 Desember 2026')) {
+            el.innerText = d.events.akad.dayDate;
+        }
+    });
+
+    // Rekening & Gift
+    const rekNum = document.querySelector('.no-rekening-marker');
+    if (rekNum) rekNum.innerText = d.gifts.bank.accountNumber;
+    const rekName = document.querySelector('.idb-copy-rek__name');
+    if (rekName) rekName.innerText = d.gifts.bank.accountHolder;
+    const copyBox = document.querySelector('.idb-copy-rek');
+    if (copyBox) copyBox.setAttribute('data-copy', d.gifts.bank.accountNumber);
+
+    // Kado Fisik
+    const giftValues = document.querySelectorAll('.idb-kirim-hadiah__value');
+    if (giftValues.length >= 3) {
+        giftValues[0].innerText = d.gifts.physicalGift.recipientName;
+        giftValues[1].innerText = d.gifts.physicalGift.phone;
+        giftValues[2].innerText = d.gifts.physicalGift.address;
+    }
+
+    // Dynamic Photos Injection
+    if (d.photos && d.photos.mainCouple) {
+        document.querySelectorAll('img[src*="main-couple"], .elementor-element-68beddea img').forEach(img => {
+            img.src = d.photos.mainCouple;
+            img.srcset = d.photos.mainCouple;
+        });
+    }
+    if (d.couple && d.couple.groom && d.couple.groom.photo) {
+        document.querySelectorAll('img[src*="groom"], .elementor-element-1dd7eecf img').forEach(img => {
+            img.src = d.couple.groom.photo;
+            img.srcset = d.couple.groom.photo;
+        });
+    }
+    if (d.couple && d.couple.bride && d.couple.bride.photo) {
+        document.querySelectorAll('img[src*="bride"], .elementor-element-504750fb img').forEach(img => {
+            img.src = d.couple.bride.photo;
+            img.srcset = d.couple.bride.photo;
+        });
+    }
+    if (d.photos && d.photos.storyPhoto) {
+        document.querySelectorAll('img[src*="story"]').forEach(img => {
+            img.src = d.photos.storyPhoto;
+            img.srcset = d.photos.storyPhoto;
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', applyWeddingData);
+`;
+    }
+
+    function downloadConfigJs() {
+        const content = generateConfigJsContent();
+        const blob = new Blob([content], { type: 'text/javascript' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'config.js';
+        a.click();
+        URL.revokeObjectURL(a.href);
+    }
+
+    function copyConfigJs() {
+        const content = generateConfigJsContent();
+        navigator.clipboard.writeText(content).then(() => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Kode Disalin!',
+                text: 'Kode config.js berhasil disalin ke clipboard.',
+                timer: 1500,
+                showConfirmButton: false,
+                background: '#1e293b',
+                color: '#fff'
+            });
+        });
+    }
+</script>
+</body>
+</html>
+
